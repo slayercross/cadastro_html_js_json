@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Usuários</title>
+</head>
+<body>
+  <h1>Cadastro de Usuários</h1>
+
+  <input type="text" id="nome" placeholder="Nome">
+  <input type="text" id="email" placeholder="Email">
+  <input type="text" id="telefone" placeholder="Telefone">
+  <button onclick="cadastrar()">Cadastrar</button>
+
+  <h2>Lista de Usuários</h2>
+  <ul id="lista"></ul>
+
+  <button onclick="baixarJSON()">Baixar JSON</button>
+
+  <script>
+    let usuarios = [];
+
+    function cadastrar() {
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+
+      if (!nome || !email || !telefone) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      const usuario = { id: Date.now(), nome, email, telefone };
+      usuarios.push(usuario);
+      salvarLocalStorage();
+      listarUsuarios();
+      limparCampos();
+    }
+
+    function listarUsuarios() {
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+
+      usuarios.forEach((usuario) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          ${usuario.nome} - ${usuario.email} - ${usuario.telefone}
+          <button onclick="editar(${usuario.id})">Editar</button>
+          <button onclick="excluir(${usuario.id})">Excluir</button>
+        `;
+        lista.appendChild(li);
+      });
+    }
+
+    function excluir(id) {
+      usuarios = usuarios.filter(u => u.id !== id);
+      salvarLocalStorage();
+      listarUsuarios();
+    }
+
+    function editar(id) {
+      const usuario = usuarios.find(u => u.id === id);
+      const novoNome = prompt("Novo nome:", usuario.nome);
+      const novoEmail = prompt("Novo email:", usuario.email);
+      const novoTelefone = prompt("Novo telefone:", usuario.telefone);
+
+      if (novoNome && novoEmail && novoTelefone) {
+        usuario.nome = novoNome;
+        usuario.email = novoEmail;
+        usuario.telefone = novoTelefone;
+        salvarLocalStorage();
+        listarUsuarios();
+      }
+    }
+
+    function salvarLocalStorage() {
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    }
+
+    function carregarLocalStorage() {
+      const dados = localStorage.getItem("usuarios");
+      if (dados) {
+        usuarios = JSON.parse(dados);
+        listarUsuarios();
+      }
+    }
+
+    function limparCampos() {
+      document.getElementById("nome").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("telefone").value = "";
+    }
+
+    function baixarJSON() {
+      const blob = new Blob([JSON.stringify(usuarios, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "usuarios.json";
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    // Carrega ao iniciar
+    carregarLocalStorage();
+  </script>
+</body>
+</html>
+
+
