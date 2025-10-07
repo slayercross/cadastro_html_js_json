@@ -22,13 +22,14 @@
     function cadastrar() {
       const nome = document.getElementById("nome").value;
       const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
 
-      if (!nome || !email) {
+      if (!nome || !email || !telefone) {
         alert("Preencha todos os campos.");
         return;
       }
 
-      const usuario = { id: Date.now(), nome, email };
+      const usuario = { id: Date.now(), nome, email, telefone };
       usuarios.push(usuario);
       salvarLocalStorage();
       listarUsuarios();
@@ -42,7 +43,7 @@
       usuarios.forEach((usuario) => {
         const li = document.createElement("li");
         li.innerHTML = `
-          ${usuario.nome} - ${usuario.email}
+          ${usuario.nome} - ${usuario.email} - ${usuario.telefone}
           <button onclick="editar(${usuario.id})">Editar</button>
           <button onclick="excluir(${usuario.id})">Excluir</button>
         `;
@@ -60,10 +61,12 @@
       const usuario = usuarios.find(u => u.id === id);
       const novoNome = prompt("Novo nome:", usuario.nome);
       const novoEmail = prompt("Novo email:", usuario.email);
+      const novoTelefone = prompt("Novo telefone:", usuario.telefone);
 
-      if (novoNome && novoEmail) {
+      if (novoNome && novoEmail && novoTelefone) {
         usuario.nome = novoNome;
         usuario.email = novoEmail;
+        usuario.telefone = novoTelefone;
         salvarLocalStorage();
         listarUsuarios();
       }
@@ -84,6 +87,7 @@
     function limparCampos() {
       document.getElementById("nome").value = "";
       document.getElementById("email").value = "";
+      document.getElementById("telefone").value = "";
     }
 
     function baixarJSON() {
@@ -103,3 +107,4 @@
   </script>
 </body>
 </html>
+
