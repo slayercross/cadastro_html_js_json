@@ -6,7 +6,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabse = createClient(SUPABSE_URL, SUPABSE_ANON_KEY)
 
 	document.getElementById('btn').addEventListener('click', async () => {
-	const{ data,error } = await supabase.from('Usuarios').select('*')
+	const{ data,error } = await supabase
+		.from('Usuarios')
+		.select('*')
 
 	if (error) {
 		document.getElementByID('saida').textContent = 'Error: ' + error.message
@@ -14,4 +16,5 @@ const supabse = createClient(SUPABSE_URL, SUPABSE_ANON_KEY)
 		document.getElementByID('saida').textContent = JSON.stringify(data, null, 2)
 	}
 })
+
 
