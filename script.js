@@ -14,4 +14,4 @@ const supabse = createClient(SUPABSE_URL, SUPABSE_ANON_KEY)
 		document.getElementByID('saida').textContent = JSON.stringify(data, null, 2)
 	}
 })
-listaUsuarios()
+
