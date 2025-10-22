@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Cadastro de Usuários</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
 
@@ -32,14 +33,43 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-		<button onclick="cadastrar()">Cadastrar</button>
+		<button class="btn btn-outline-primary" onclick="cadastrar()">Cadastrar</button>
 		</td>
 	</tr>
 </table>
 
   <h2>Lista de Usuários</h2>
-  <ul id="lista"></ul>  
-<script src="script.js"></script>
+  <ul id="lista"></ul>
+
+  <h2>Lista do BD</h2>
+  <button id="btn"></button>
+  <pre id="saida"></pre>
+
+  <script src="https://apeammhaanpwtuwrxeze.supabase.co"></script>
+<script src="https://esm.sh/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>  
+
+<script>
+import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+const SUPABASE_URL = 'https://apeammhaanpwtuwrxeze.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwZWFtbWhhYW5wd3R1d3J4ZXplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDA2NzcsImV4cCI6MjA3NTQ3NjY3N30.BuMnfZrM1mfJIP4XFWJg2lf7TOx8GocLVDp2FM-Uti8'
+
+const supabase = createClient(SUPABSE_URL, SUPABSE_ANON_KEY)
+
+	document.getElementById('btn').addEventListener('click', async () => {
+	const{ data,error } = await supabase.from('Usuarios').select('*')
+
+	if (error) {
+		document.getElementByID('saida').textContent = 'Error: ' + error.message
+	} else {
+		document.getElementByID('saida').textContent = JSON.stringify(data, null, 2)
+	}
+})
+</script>
+
+
 </body>
 </html>
+
 
